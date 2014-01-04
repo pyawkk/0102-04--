@@ -7,8 +7,8 @@
 //
 
 #import "pyViewController.h"
-
-@interface pyViewController ()
+#define KBaseURL     @"http://dict.cn/"
+@interface pyViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -17,13 +17,39 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+
+    //这里是设置
+    
+    
 }
 
-- (void)didReceiveMemoryWarning
+
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if (textField.text.length > 0) {
+        [self getHTML:textField.text];
+    }
+    return YES;
 }
+
+
+-(void)getHTML:(NSString *)string
+{
+    //设置url
+    NSString *url = [NSString stringWithFormat:@"%@%@",KBaseURL,string];
+    //设置urlrequest
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0f];
+    //发送亲求
+    [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+       //这里得到了请求
+        NSLog(@"%@",data);
+    }];
+
+
+}
+
+
+
 
 @end
